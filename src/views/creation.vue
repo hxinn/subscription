@@ -1,34 +1,44 @@
 <template>
-<div>
-    test
-</div>
-
+  <el-container>
+    <el-header class="top">
+      <div class="logo">{{ title }}</div>
+      <el-button class="about">关于</el-button>
+    </el-header>
+    <el-main class="main-body">
+      <el-row :gutter="10" class="main-section">
+        {{msg}}
+        <tinymce-editor ref="editor" v-model="msg" :disabled="disabled" @onClick="onClick"></tinymce-editor>
+        <button @click="clear">清空内容</button>
+        <button @click="disabled = true">禁用</button>
+      </el-row>
+    </el-main>
+  </el-container>
 </template>
-<style>
-  .el-row {
-    margin-bottom: 20px;
-    &:last-child {
-      margin-bottom: 0;
+
+<script>
+import TinymceEditor from '../components/tinymce-editor'
+export default {
+  components: {
+    TinymceEditor
+  },
+  data () {
+    return {
+      title:'',
+      msg: 'Welcome to Use Tinymce Editor',
+      disabled: false
+    }
+  },
+  methods: {
+    // 鼠标单击的事件
+    onClick (e, editor) {
+      console.log('Element clicked')
+      console.log(e)
+      console.log(editor)
+    },
+    // 清空内容
+    clear () {
+      this.$refs.editor.clear()
     }
   }
-  .el-col {
-    border-radius: 4px;
-  }
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-  .bg-purple {
-    background: #d3dce6;
-  }
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
-</style>
+}
+</script>

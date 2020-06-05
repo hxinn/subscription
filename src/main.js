@@ -1,10 +1,15 @@
 import Vue from 'vue'
-import ElementUI from 'element-ui';
+import {Row,Col,Container,Header,Main,Button} from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue'
 import router from './router'
 
-Vue.use(ElementUI);
+Vue.use(Row);
+Vue.use(Col);
+Vue.use(Container);
+Vue.use(Header);
+Vue.use(Main);
+Vue.use(Button);
 Vue.config.productionTip = false
 
 new Vue({
