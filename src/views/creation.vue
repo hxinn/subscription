@@ -6,10 +6,14 @@
     </el-header>
     <el-main class="main-body">
       <el-row :gutter="10" class="main-section">
-        {{msg}}
-        <tinymce-editor ref="editor" v-model="msg" :disabled="disabled" @onClick="onClick"></tinymce-editor>
-        <button @click="clear">清空内容</button>
-        <button @click="disabled = true">禁用</button>
+        <el-col :span="12">
+         <tinymce-editor ref="editor" v-model="msg" :disabled="disabled" @onClick="onClick"></tinymce-editor>
+        </el-col>
+        <el-col :span="12">
+           <div v-html="msg">
+
+           </div>
+        </el-col>
       </el-row>
     </el-main>
   </el-container>
@@ -24,7 +28,7 @@ export default {
   data () {
     return {
       title:'',
-      msg: 'Welcome to Use Tinymce Editor',
+      msg: '<h1 style="text-align: center;"><strong>开始你的创作</strong></h1>',
       disabled: false
     }
   },
