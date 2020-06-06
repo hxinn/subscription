@@ -11,7 +11,9 @@
         </el-col>
         <el-col :span="12">
           <div class="panel-container">
-            <div class="meta-panel" v-html="msg"></div>
+            <div class="meta-panel">
+              <div class="output" v-html="msg"></div>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -66,5 +68,8 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+.output{
+  width: 100%;
 }
 </style>

@@ -21,6 +21,7 @@ import "tinymce/plugins/link"; // 插入链接
 import "tinymce/plugins/emoticons"; // 表情
 import "tinymce/plugins/table"; // 表格
 import "tinymce/plugins/hr"; // 分割线
+import "tinymce/plugins/paste"; // 粘贴
 export default {
   components: {
     Editor
@@ -42,7 +43,7 @@ export default {
     },
     plugins: {
       type: [String, Array],
-      default: "advlist autolink link image lists emoticons table hr"
+      default: "advlist autolink link image lists emoticons table hr paste "
     }
   },
   data() {
@@ -56,17 +57,36 @@ export default {
         // content_css: `${this.baseUrl}/tinymce/skins/content/dark/content.css`, // 暗色系
         height: 800,
         plugins: this.plugins,
+                // CONFIG: Paste
+        paste_retain_style_properties: 'all',
+        paste_word_valid_elements: '*[*]', // word需要它
+        paste_data_images: true, // 粘贴的同时能把内容里的图片自动上传，非常强力的功能
+        paste_convert_word_fake_lists: false, // 插入word文档需要该属性
+        paste_webkit_styles: 'all',
+        paste_merge_formats: true,
+        nonbreaking_force_tab: false,
+        paste_auto_cleanup_on_paste: false,
         emoticons_database_url: `${this.baseUrl}/tinymce/emojis.js`,
         toolbar:  [
         " bold  italic underline strikethrough link forecolor backcolor hr | styleselect |  fontsizeselect | table alignleft aligncenter alignright alignjustify bullist numlist outdent indent | undo redo | image emoticons blockquote removeformat "
-      ],
+        ],
         branding: false,
         menubar: true,
         // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
         // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
         images_upload_handler: (blobInfo, success) => {
+          console.log("upload:",blobInfo)
           const img = "data:image/jpeg;base64," + blobInfo.base64();
           success(img);
+        },
+        // 图片粘贴
+        paste_preprocess: function(plugin, args) {
+          let imageArray = []
+          args.content.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, function (match, capture) {
+            imageArray.push(capture)
+          })
+        console.log("imgArry",imageArray)
+        //   this.uploadRemoteFile(imageArray, 0)
         }
       },
       myValue: this.value
