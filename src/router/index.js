@@ -11,17 +11,26 @@ const routes = [
   {
     path: '/creation',
     name: '创作',
-    component: () => import('../views/creation.vue')
+    component: () => import('../views/creation.vue'),
+    meta: {
+      title: '创作中心'
+    }
   },
   {
     path: '/post',
     name: '文章',
-    component: () => import('../views/post.vue')
+    component: () => import('../views/post.vue'),
+    meta: {
+      title: '文章'
+    }
   },
   {
     path: '/test',
-    name: '文章',
-    component: () => import('../views/test.vue')
+    name: '测试',
+    component: () => import('../views/test.vue'),
+    meta: {
+      title: '测试'
+    }
   }
 ]
 

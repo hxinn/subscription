@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="rich_media_title">当猫做成手办后，网友：猫界又出新品种了？！</h2>
+    <h2 class="rich_media_title">{{title}}</h2>
     <div class="rich_media_subtitle">阿里技术&nbsp;昨天</div>
     <div
       class="contianer"
@@ -15,7 +15,13 @@
 <script>
 import "./../assets/css/app.css";
 export default {
+    data(){
+      return{
+        title:"当猫做成手办后，网友：猫界又出新品种了？！"
+      }
+    },
     mounted() {
+      document.title = this.title;
       console.log()
       location.href="qlinks://to/sign"
     }
