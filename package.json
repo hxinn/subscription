@@ -11,6 +11,8 @@
     "@tinymce/tinymce-vue": "^3.2.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
+    "html-minifier": "^4.0.0",
+    "qs": "^6.9.4",
     "tinymce": "^5.3.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"

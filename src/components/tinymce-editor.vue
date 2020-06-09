@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+import { uploadfile } from "@/api";
 import tinymce from "tinymce/tinymce";
 import Editor from "@tinymce/tinymce-vue";
 import "tinymce/themes/silver";
@@ -22,6 +23,8 @@ import "tinymce/plugins/emoticons"; // 表情
 import "tinymce/plugins/table"; // 表格
 import "tinymce/plugins/hr"; // 分割线
 import "tinymce/plugins/paste"; // 粘贴
+import "tinymce/plugins/importcss"; // 粘贴
+let that
 export default {
   components: {
     Editor
@@ -43,9 +46,10 @@ export default {
     },
     plugins: {
       type: [String, Array],
-      default: "advlist autolink link image lists emoticons table hr paste "
+      default: "advlist autolink link image lists emoticons table hr paste importcss "
     }
   },
+
   data() {
     return {
       init: {
@@ -57,12 +61,28 @@ export default {
         // content_css: `${this.baseUrl}/tinymce/skins/content/dark/content.css`, // 暗色系
         height: 800,
         plugins: this.plugins,
-                // CONFIG: Paste
+        importcss_append: true,
+        // CONFIG: ContentStyle 这块很重要， 在最后呈现的页面也要写入这个基本样式保证前后一致， `table`和`img`的问题基本就靠这个来填坑了
+        content_style: `
+            *                         { padding:0; margin:0; }
+            html, body                { height:100%; }
+            img                       { max-width:100%; display:block;height:auto; }
+            a                         { text-decoration: none; }
+            iframe                    { width: 100%; }
+            p                         { line-height:1.6; margin: 0px; }
+            table                     { word-wrap:break-word; word-break:break-all; max-width:100%; border:none; border-color:#999; }
+            .mce-object-iframe        { width:100%; box-sizing:inherit; margin:0; padding:0; }
+            ul,ol                     { list-style-position:inside; }
+            section                   { box-sizing:inherit;}
+          `,
+        fontsize_formats: "10px 11px 12px 14px 16px 18px 20px 24px",
+        // CONFIG: Paste
+        paste_webkit_styles:"all",
+        paste_remove_styles_if_webkit: false,
         paste_retain_style_properties: 'all',
         paste_word_valid_elements: '*[*]', // word需要它
         paste_data_images: true, // 粘贴的同时能把内容里的图片自动上传，非常强力的功能
         paste_convert_word_fake_lists: false, // 插入word文档需要该属性
-        paste_webkit_styles: 'all',
         paste_merge_formats: true,
         nonbreaking_force_tab: false,
         paste_auto_cleanup_on_paste: false,
@@ -74,10 +94,21 @@ export default {
         menubar: true,
         // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
         // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
-        images_upload_handler: (blobInfo, success) => {
+        images_upload_handler: (blobInfo, success,failure) => {
           console.log("upload:",blobInfo)
-          const img = "data:image/jpeg;base64," + blobInfo.base64();
-          success(img);
+        //   const img = "data:image/jpeg;base64," + blobInfo.base64();
+        const formData = new FormData();
+        formData.append('files', blobInfo.blob(),blobInfo.filename());
+        uploadfile(formData).then(result => {
+             let resultData = result.data;
+             console.log("data",resultData)
+             if (resultData.code === 200) {
+                   success(resultData.data[0]); 
+            }else{
+                failure('上传失败: ' + resultData.message);
+            }
+          });
+      
         },
         // 图片粘贴
         paste_preprocess: function(plugin, args) {
@@ -85,14 +116,35 @@ export default {
           args.content.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, function (match, capture) {
             imageArray.push(capture)
           })
-        console.log("imgArry",imageArray)
-        //   this.uploadRemoteFile(imageArray, 0)
+          console.log("imgArry",imageArray)
+          that.uploadRemoteFile(imageArray, 0)
+        }
+      },
+              // 上传远程图片
+    uploadRemoteFile(imageArray, n) {
+        if (n < imageArray.length) {
+            console.log("remote",imageArray[n])
+        //   api_file
+        //     .doUploadRemoteFile({
+        //       url: imageArray[n],
+        //       bkeyCode: this.bkeyCode
+        //     })
+        //     .then(res => {
+        //       let html = tinymce.activeEditor.getContent();
+        //       html = html.replace(
+        //         imageArray[n],
+        //         `${process.env.VUE_APP_API_BASE_URL}/file/getPreviewPdfFileByApxId/${res.data.refcode}`
+        //       );
+        //       tinymce.activeEditor.setContent(html);
+              this.uploadRemoteFile(imageArray, ++n);
+        //     });
         }
       },
       myValue: this.value
     };
   },
   mounted() {
+    that = this;
     tinymce.init({});
   },
   methods: {
@@ -104,7 +156,8 @@ export default {
     // 可以添加一些自己的自定义事件，如清空内容
     clear() {
       this.myValue = "";
-    }
+    },
+    
   },
   watch: {
     value(newValue) {

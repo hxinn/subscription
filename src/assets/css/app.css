@@ -62,7 +62,7 @@ section {
   margin: 20px 0;
 }
 .preview {
-  margin: 0 -20px;
+  margin:20px auto;
   width: 375px;
   padding: 20px;
   font-size: 16px;

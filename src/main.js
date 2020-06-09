@@ -12,6 +12,7 @@ Vue.use(Main);
 Vue.use(Button);
 Vue.config.productionTip = false
 
+
 new Vue({
   router,
   render: h => h(App)

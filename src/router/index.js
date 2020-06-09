@@ -17,6 +17,11 @@ const routes = [
     path: '/post',
     name: '文章',
     component: () => import('../views/post.vue')
+  },
+  {
+    path: '/test',
+    name: '文章',
+    component: () => import('../views/test.vue')
   }
 ]
 
@@ -24,5 +29,17 @@ const router = new VueRouter({
   mode: 'history',
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const title = to.meta && to.meta.title;
+  if (title) {
+    document.title = title;
+  }
+  next();
+});
+
+export {
+  router
+};
 
 export default router
