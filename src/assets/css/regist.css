@@ -1,0 +1,141 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+input {
+  outline-style: none;
+  border: none;
+  color: #000000;
+  border-bottom: 0.01rem solid #ccc;
+  border-radius: 0.03rem;
+  padding: 0.13rem 0.14rem;
+  font-size: 0.14rem;
+  font-family: "Microsoft soft";
+}
+input::-webkit-input-placeholder {
+  color: #c9c9c9;
+}
+input:focus {
+  border-bottom-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 0.01rem 0.01rem rgba(0, 0, 0, 0.075),
+    0 0 0.08rem rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 0.01rem 0.01rem rgba(0, 0, 0, 0.075);
+}
+.header {
+  position: relative;
+  background: url(/static/images/qLinks/bg.png) no-repeat;
+  width: 100%;
+  height: 5rem;
+  background-size: 100%100%;
+}
+.header-titile {
+  position: absolute;
+  width: 100%;
+  color: #ffffff;
+  font-size: 0.6rem;
+}
+.header-subTitle {
+  position: relative;
+  text-align: center;
+  font-size: 0.5rem;
+  color: #000000;
+  top: 83%;
+}
+.form-table{
+    text-align: center;
+}
+.dropdown {
+  text-align: left;
+  margin: 0 auto;
+  font-size: 0.22rem;
+  font-family: "Microsoft soft";
+  color: #000000;
+  width: 80%;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  padding: 0.13rem 0.14rem;
+  cursor: pointer;
+  outline: 0;
+  border-bottom: 0.01rem solid #c9c9c9;
+}
+.dp-list {
+  list-style: none;
+  width: 100%;
+  height: 0.3rem;
+  line-height: 0.3rem;
+  background: #ffffff;
+  border-left: 0.01rem solid #c9c9c9;
+  border-right: 0.01rem solid #c9c9c9;
+  border-bottom: 0.01rem solid #c9c9c9;
+  position: relative;
+  padding: 0.13rem 0.14rem;
+  margin: 0 -0.14rem;
+}
+.dropdown .dp-img {
+  float: right;
+  width: 0.2rem;
+  height: 0.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hide {
+  display: none;
+}
+.inp-info {
+    position: relative;
+    font-size: 0.22rem;
+    width: 80%;
+    margin: 0 auto;
+}
+.inp-code {
+  font-size: 0.22rem;
+  width: 58%;
+  margin: 0 auto;
+}
+.code-action {
+  display: inline;
+  font-size: 0.3rem;
+}
+.reg-btn {
+  margin: 10% auto;
+  width: 3.27rem;
+  height: 0.95rem;
+  background: rgba(66, 15, 230, 1);
+  border-radius: 0.48rem;
+  font-size: 0.36rem;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 1);
+}
+.btn-title {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+}
+.toDownload {
+  font-size: 0.3rem;
+  text-align: center;
+  margin: 4% auto;
+}
+.toDownload a {
+  color: #171616;
+}
+.popub-btn {
+  margin-top: 20%;
+  width: 54%;
+  height: 100%;
+  color: #fff;
+  font-size: 0.32rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  background: rgba(66, 15, 230, 1);
+  border-radius: 0.64rem;
+  outline: none;
+  border: 0;
+}
+.layui-m-layercont {
+}

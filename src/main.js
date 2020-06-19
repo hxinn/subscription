@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {Row,Col,Container,Header,Main,Button,Input} from 'element-ui';
+import {Row,Col,Container,Header,Main,Button,Input,Upload,Message} from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue'
 import router from './router'
@@ -11,8 +11,10 @@ Vue.use(Header);
 Vue.use(Main);
 Vue.use(Button);
 Vue.use(Input);
-Vue.config.productionTip = false
-
+Vue.use(Upload);
+Vue.component(Message);
+Vue.config.productionTip = false;
+Vue.prototype.$message = Message;
 
 new Vue({
   router,

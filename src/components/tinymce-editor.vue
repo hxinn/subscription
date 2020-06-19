@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import { uploadfile } from "@/api";
+import { uploadfile ,urlUploadfile} from "@/api";
 import tinymce from "tinymce/tinymce";
 import Editor from "@tinymce/tinymce-vue";
 import "tinymce/themes/silver";
@@ -24,7 +24,7 @@ import "tinymce/plugins/table"; // 表格
 import "tinymce/plugins/hr"; // 分割线
 import "tinymce/plugins/paste"; // 粘贴
 import "tinymce/plugins/importcss"; // 粘贴
-let that
+let that;
 export default {
   components: {
     Editor
@@ -46,7 +46,8 @@ export default {
     },
     plugins: {
       type: [String, Array],
-      default: "advlist autolink link image lists emoticons table hr paste importcss "
+      default:
+        "advlist autolink link image lists emoticons table hr paste importcss "
     }
   },
 
@@ -77,68 +78,79 @@ export default {
           `,
         fontsize_formats: "10px 11px 12px 14px 16px 18px 20px 24px",
         // CONFIG: Paste
-        paste_webkit_styles:"all",
+        paste_webkit_styles: "all",
         paste_remove_styles_if_webkit: false,
-        paste_retain_style_properties: 'all',
-        paste_word_valid_elements: '*[*]', // word需要它
+        paste_retain_style_properties: "all",
+        paste_word_valid_elements: "*[*]", // word需要它
         paste_data_images: true, // 粘贴的同时能把内容里的图片自动上传，非常强力的功能
         paste_convert_word_fake_lists: false, // 插入word文档需要该属性
         paste_merge_formats: true,
         nonbreaking_force_tab: false,
         paste_auto_cleanup_on_paste: false,
         emoticons_database_url: `${this.baseUrl}/tinymce/emojis.js`,
-        toolbar:  [
-        " bold  italic underline strikethrough link forecolor backcolor hr | styleselect |  fontsizeselect | table alignleft aligncenter alignright alignjustify bullist numlist outdent indent | undo redo | image emoticons blockquote removeformat "
+        toolbar: [
+          " bold  italic underline strikethrough link forecolor backcolor hr | styleselect |  fontsizeselect | table alignleft aligncenter alignright alignjustify bullist numlist outdent indent | undo redo | image emoticons blockquote removeformat "
         ],
         branding: false,
         menubar: true,
         // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
         // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
-        images_upload_handler: (blobInfo, success,failure) => {
-          console.log("upload:",blobInfo)
-        //   const img = "data:image/jpeg;base64," + blobInfo.base64();
-        const formData = new FormData();
-        formData.append('files', blobInfo.blob(),blobInfo.filename());
-        uploadfile(formData).then(result => {
-             let resultData = result.data;
-             console.log("data",resultData)
-             if (resultData.code === 200) {
-                   success(resultData.data[0]); 
-            }else{
-                failure('上传失败: ' + resultData.message);
+        images_upload_handler: (blobInfo, success, failure) => {
+          console.log("upload:", blobInfo);
+          //   const img = "data:image/jpeg;base64," + blobInfo.base64();
+          const formData = new FormData();
+          formData.append("files", blobInfo.blob(), blobInfo.filename());
+          uploadfile(formData).then(result => {
+            let resultData = result.data;
+            console.log("data", resultData);
+            if (resultData.code === 200) {
+              success(resultData.data[0]);
+            } else {
+              failure("上传失败: " + resultData.message);
             }
           });
-      
         },
         // 图片粘贴
         paste_preprocess: function(plugin, args) {
           let imageArray = []
-          args.content.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, function (match, capture) {
-            imageArray.push(capture)
-          })
-          console.log("imgArry",imageArray)
-          that.uploadRemoteFile(imageArray, 0)
+          args.content.replace(/<img [^>]*src=['"]([^'"]+)[^>]*>/gi, function(
+            match,
+            capture
+          ) {
+            imageArray.push(capture);
+          });
+          
+          // let imageArray = Array.from(imageSet)
+          console.log("arrays",imageArray)
+          that.uploadRemoteFile(imageArray, 0);
         }
       },
-              // 上传远程图片
-    uploadRemoteFile(imageArray, n) {
+      // 上传远程图片
+      uploadRemoteFile(imageArray, n) {
+        console.log("index",n,"length",imageArray.length)
         if (n < imageArray.length) {
-            console.log("remote",imageArray[n])
-        //   api_file
-        //     .doUploadRemoteFile({
-        //       url: imageArray[n],
-        //       bkeyCode: this.bkeyCode
-        //     })
-        //     .then(res => {
-        //       let html = tinymce.activeEditor.getContent();
-        //       html = html.replace(
-        //         imageArray[n],
-        //         `${process.env.VUE_APP_API_BASE_URL}/file/getPreviewPdfFileByApxId/${res.data.refcode}`
-        //       );
-        //       tinymce.activeEditor.setContent(html);
-              this.uploadRemoteFile(imageArray, ++n);
-        //     });
+          let imgUrl = imageArray[n];
+          console.log("index",n);
+          let data = { url: imgUrl };
+          let index = n;
+          urlUploadfile(data).then(result => {
+            let resultData = result.data;
+            if (resultData.code === 200) {
+              let lineUrl = resultData.data;
+              console.log("index:", index, "remote", imgUrl, "data", lineUrl);
+              let html = tinymce.activeEditor.getContent();
+              html = html.replace(imageArray[index], lineUrl);
+              tinymce.activeEditor.setContent(html);
+            } else {
+              console.log("上传图片失败：", resultData.message);
+            }
+            this.uploadRemoteFile(imageArray, ++n);
+          });
+        }else{
+          let html = tinymce.activeEditor.getContent();
+          this.value = html
         }
+    
       },
       myValue: this.value
     };
@@ -156,8 +168,7 @@ export default {
     // 可以添加一些自己的自定义事件，如清空内容
     clear() {
       this.myValue = "";
-    },
-    
+    }
   },
   watch: {
     value(newValue) {

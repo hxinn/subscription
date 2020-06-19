@@ -22,7 +22,7 @@ service.interceptors.response.use(
     },
     error => {
         if(error.response && error.response.status == 404){
-            Message.error({message: '页面不存在!'})
+            Message.error("页面不存在");
         }
         return Promise.reject(error.response)
     }

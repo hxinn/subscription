@@ -9,7 +9,25 @@
       <div id="output">
       </div>
     </div>
+  <el-row style="text-align: center;">
+    <el-button @click="openView('qlinks://to/news')">打开新闻列表</el-button>
+    <el-button @click="openView('qlinks://to/news?id=42223348285118')" type="primary">打开新闻列表详情</el-button><br><br>
+    <el-button @click="openView('qlinks://to/sign')" type="success">签到</el-button>
+    <el-button @click="openView('qlinks://to/luckyWheel')" type="info">大转盘</el-button><br><br>
+    <el-button @click="openView('qlinks://to/login')" type="warning">登陆</el-button>
+    <el-button @click="openView('qlinks://to/bookmarks')" type="danger">书签</el-button><br><br>
+  </el-row>
+  <el-row style="text-align: center;">
+
+    <el-button icon="el-icon-search" circle></el-button>
+    <el-button  type="primary" icon="el-icon-edit" circle></el-button>
+    <el-button type="success" icon="el-icon-check" circle></el-button>
+    <el-button type="info" icon="el-icon-message" circle></el-button>
+    <el-button type="warning" icon="el-icon-star-off" circle></el-button>
+    <el-button type="danger" icon="el-icon-delete" circle></el-button>
+  </el-row>
   </div>
+
 </template>
 
 <script>
@@ -24,6 +42,12 @@ export default {
       document.title = this.title;
       console.log()
       location.href="qlinks://to/sign"
+    },
+    methods:{
+        openView(url){
+          console.log("url",url)
+          location.href=url
+        }
     }
 };
 </script>
