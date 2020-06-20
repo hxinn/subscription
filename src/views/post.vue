@@ -2,7 +2,7 @@
     <div>
         <h2 class="rich_media_title">{{ title }}</h2>
         <div class="rich_media_subtitle">阿里技术&nbsp;昨天</div>
-        <div
+        <!-- <div
             class="contianer"
             style="
                 width: 100%;
@@ -17,7 +17,7 @@
             "
         >
             <div id="output"></div>
-        </div>
+        </div> -->
         <el-row style="text-align: center;">
             <el-button @click="openView('qlinks://to/news')"
                 >打开新闻列表</el-button
