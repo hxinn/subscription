@@ -1,8 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+const view = () => import('@/layout/view')
 // 一级页面
 const login = () => import('@/views/login/login')                                    // 登录页
+const index = () => import('@/views/index/index')                                    // 首页
+// 二级页面
+const home = () => import('@/views/index/children/home/home')                        // 主页
+// edit
+const publish = () => import('@/views/index/children/publish/publish')               // 编辑页
+// manage
+const articles = () => import('@/views/index/children/manage/articles/articles')     // 我的作品
+const own = () => import('@/views/index/children/manage/articles/children/own')
+const comment = () => import('@/views/index/children/manage/comment/comment')        // 评论管理
+const newest = () => import('@/views/index/children/manage/comment/children/newest')
+const all = () => import('@/views/index/children/manage/comment/children/all')
+const material = () => import('@/views/index/children/manage/material/material')     // 素材管理
+const pic = () => import('@/views/index/children/manage/material/children/pic')
+// count
+const count = () => import('@/views/index/children/count/count')                     // 统计
+// setting
+const setting = () => import('@/views/index/children/setting/setting')               // 设置
 
 Vue.use(VueRouter)
 
@@ -18,8 +36,8 @@ Vue.use(VueRouter)
 */
 export const routes = [
   {
-    path: '*',
-    redirect: '/creation'
+    path: '',
+    redirect: '/index'
   },
   {
     path: '/creation',
@@ -30,6 +48,114 @@ export const routes = [
       login: true
     }
   },
+  {
+    name: 'index',
+    path: '/index',
+    redirect: '/index/home',
+    component: index,
+    meta: { login: true },
+    children: [
+        {
+            name: 'home',
+            path: 'home',
+            title: '主页',
+            icon: 'el-icon-fa-home',
+            component: home
+        },
+        {
+            name: 'creation',
+            path: 'creation',
+            title: '创作',
+            icon: 'el-icon-fa-pencil',
+            component: creation
+        },
+        {
+            name: 'publish',
+            path: 'publish',
+            title: '发表',
+            icon: 'el-icon-fa-pencil',
+            component: publish
+        },
+        {
+            name: 'manage',
+            path: 'manage',
+            title: '管理',
+            icon: 'el-icon-fa-cube',
+            component: view
+            // children: [
+            //     {
+            //         name: 'articles',
+            //         path: 'articles',
+            //         title: '内容管理',
+            //         component: articles,
+            //         redirect: '/index/manage/articles/own',
+            //         children: [
+            //             {
+            //                 name: 'own',
+            //                 path: 'own',
+            //                 title: '我发表的',
+            //                 hidden: true,
+            //                 component: own
+            //             }
+            //         ]
+            //     },
+            //     {
+            //         name: 'comment',
+            //         path: 'comment',
+            //         title: '评论管理',
+            //         component: comment,
+            //         redirect: '/index/manage/comment/newest',
+            //         children: [
+            //             {
+            //                 name: 'newest',
+            //                 path: 'newest',
+            //                 title: '最新评论',
+            //                 hidden: true,
+            //                 component: newest
+            //             },
+            //             {
+            //                 name: 'all',
+            //                 path: 'all',
+            //                 title: '文章评论',
+            //                 hidden: true,
+            //                 component: all
+            //             }
+            //         ]
+            //     },
+            //     {
+            //         name: 'material',
+            //         path: 'material',
+            //         title: '素材管理',
+            //         component: material,
+            //         redirect: '/index/manage/material/pic',
+            //         children: [
+            //             {
+            //                 name: 'pic',
+            //                 path: 'pic',
+            //                 title: '图片管理',
+            //                 hidden: true,
+            //                 component: pic
+            //             }
+            //         ]
+            //     }
+            // ]
+        },
+        {
+            name: 'count',
+            path: 'count',
+            title: '统计',
+            icon: 'el-icon-fa-bar-chart',
+            component: count
+        },
+        {
+            name: 'setting',
+            path: 'setting',
+            title: '设置',
+            icon: 'el-icon-fa-cog',
+            component: setting
+        }
+    ]
+},
   {
     path: '/login',
     name: '登陆',

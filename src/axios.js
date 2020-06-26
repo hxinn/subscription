@@ -1,5 +1,6 @@
 import axios from "axios"
 import qs from "qs"
+import store from '@/store'
 import { Message } from "element-ui"
 
 // 创建axios实例
@@ -84,6 +85,27 @@ export function formpost(url, data = {}) {
     }
     //sendObject.data=JSON.stringify(data);
     return service(sendObject)
+}
+
+export const request = async(url = '', type = 'GET', data = {}) => {
+    let result
+    type = type.toUpperCase()
+    // 让每个请求都携带userid
+    if (store.state.user) {
+        data.userid = store.state.user.userid
+    }
+    if (type === 'GET') {
+        await service.get(url, { params: data })
+        .then(res => {
+            result = res.data
+        })
+    } else if (type === 'POST') {
+        await service.post(url, qs.stringify(data))
+        .then(res => {
+            result = res.data
+        })
+    }
+    return result
 }
 
 export { service }
